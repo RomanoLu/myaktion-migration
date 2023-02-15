@@ -1,6 +1,7 @@
 package de.dpunkt.myaktion.data;
 
 import de.dpunkt.myaktion.model.Campaign;
+import de.dpunkt.myaktion.model.Organizer;
 import de.dpunkt.myaktion.services.CampaignService;
 import de.dpunkt.myaktion.util.Events.Added;
 import de.dpunkt.myaktion.util.Events.Deleted;
@@ -34,7 +35,7 @@ public class CampaignListProducer {
     }
 
     public void onCampaignAdded(@Observes @Added Campaign campaign) {
-        campaignService.addCampaign(campaign);
+        campaignService.addCampaign(campaign, campaign.getOrganizer());
         init();
     }
 

@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/")
+@Path("/donation")
 public class DonationResource {
 
     @Inject
@@ -29,24 +29,10 @@ public class DonationResource {
 
     @POST
     @Path("/donation/{campaignId}")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addDonation(@PathParam(value = "campaignId") Long campaignId,
-                            @FormParam(value = "donorName") String donorName,
-                            @FormParam(value = "amount") Double amount,
-                            @FormParam(value = "iban") String iban,
-                            @FormParam(value = "nameOfBank") String nameOfBank,
-                            @FormParam(value = "receiptRequested") Boolean receiptRequested) {
-        Donation donation = new Donation();
-        donation.setDonorName(donorName);
-        donation.setAmount(amount);
-        Account account = new Account();
-        account.setIban(iban);
-        account.setName(donorName);
-        account.setNameOfBank(nameOfBank);
-        donation.setAccount(account);
-        donation.setReceiptRequested(receiptRequested);
-        donation.setStatus(Status.IN_PROCESS);
-        donationService.addDonation(campaignId, donation);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void addDonation(Donation donation) {  
+              
+        donationService.addDonation(donation.getCampaign().getId(), donation);
     }
 
     @GET

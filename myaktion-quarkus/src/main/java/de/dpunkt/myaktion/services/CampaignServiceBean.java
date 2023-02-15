@@ -21,25 +21,29 @@ import java.util.List;
 public class CampaignServiceBean implements CampaignService {
     @Inject
     EntityManager entityManager;
-/*
-    @Resource
-    private SessionContext sessionContext;
- */
-    @Resource
-    private SecurityIdentity securityIdentity;
 
+   
     @Override
     public List<Campaign> getAllCampaigns() {
-        TypedQuery<Campaign> query = entityManager.createNamedQuery(Campaign.findByOrganizer, Campaign.class);
-        query.setParameter("organizer", getLoggedinOrganizer());
+        TypedQuery<Campaign> query = entityManager.createNamedQuery(Campaign.findAll, Campaign.class);
         List<Campaign> campaigns = query.getResultList();
         campaigns.forEach(campaign -> campaign.setAmountDonatedSoFar(getAmountDonatedSoFar(campaign)));
         return campaigns;
     }
 
     @Override
-    public Campaign addCampaign(Campaign campaign) {
-        Organizer organizer = getLoggedinOrganizer();
+    public void persistCampaign(Campaign c){
+        this.entityManager.persist(c);
+    }
+    @Override
+    @Transactional
+    public Campaign findCampaign(Long id){       
+        return entityManager.find(Campaign.class, id);
+    }
+
+    @Override
+    public Campaign addCampaign(Campaign campaign, Organizer organizer) {
+        //Organizer organizer = getLoggedinOrganizer();
         campaign.setOrganizer(organizer);
         entityManager.persist(campaign);
         return campaign;
@@ -78,11 +82,7 @@ public class CampaignServiceBean implements CampaignService {
     }
 
     private Organizer getLoggedinOrganizer() {
-        String organizerEmail = securityIdentity.getPrincipal().getName();
-       // String organizerEmail = sessionContext.getCallerPrincipal().getName();
-        Organizer organizer = entityManager.createNamedQuery(Organizer.findByEmail, Organizer.class)
-                .setParameter("email", organizerEmail).getSingleResult();
-        return organizer;
+        return null;
     }
 
 

@@ -12,7 +12,7 @@ public class SchedulerBean {
     @Inject
     private DonationService donationService;
 
-    @Scheduled(every="60s")
+    @Scheduled(every="600s", delay = 60)
     public void doTransferDonations() {
         donationService.transferDonations();
     }

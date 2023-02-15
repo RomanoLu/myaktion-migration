@@ -38,7 +38,7 @@ public class Donation {
     @Id
     private Long id;
 
-    public enum Status {
+    public static enum Status {
         TRANSFERRED, IN_PROCESS;
     }
 

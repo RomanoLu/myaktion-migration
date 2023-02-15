@@ -13,4 +13,6 @@ public interface DonationService {
     void transferDonations();
 
     List<Donation> getDonationListPublic(Long campaignId) throws ObjectNotFoundException;
+
+    public void persistDonation(Donation d);
 }

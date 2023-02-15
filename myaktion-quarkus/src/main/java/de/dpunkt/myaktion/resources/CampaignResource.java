@@ -36,7 +36,7 @@ public class CampaignResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Campaign addCampaign(Campaign campaign) {
-        return campaignService.addCampaign(campaign);
+        return campaignService.addCampaign(campaign, campaign.getOrganizer());
     }
 
     @PUT
