@@ -3,11 +3,8 @@ package de.dpunkt.myaktion.services;
 import de.dpunkt.myaktion.model.Campaign;
 import de.dpunkt.myaktion.model.Donation;
 import de.dpunkt.myaktion.model.Donation.Status;
-//import de.dpunkt.myaktion.monitor.ws.DonationDelegatorService;
 import de.dpunkt.myaktion.services.exceptions.ObjectNotFoundException;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -16,8 +13,6 @@ import javax.transaction.Transactional;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RequestScoped
@@ -35,24 +30,20 @@ public class DonationServiceBean implements DonationService {
     }
 
     @Override
-    public void addDonation(Long campaignId, Donation donation) {
-       /*  try {
-            DonationDelegatorService delegatorService = new DonationDelegatorService();
-            delegatorService.getDonationDelegatorPort()
-                    .sendDonation(campaignId, donation);
-        } catch (Exception e) {
-            logger.log(Level.SEVERE,
-                    "Spende nicht weitergeleitet. Läuft der Glassfish?", e);
-        }
-        */
+    public Donation addDonation(Long campaignId, Donation donation) {
         Campaign managedCampaign = entityManager.find(Campaign.class, campaignId);
         donation.setCampaign(managedCampaign);
-        entityManager.persist(donation);
+        if (donation.getCampaign()!= null){
+            entityManager.persist(donation);
+        }else{
+            System.out.println("Campaign ist angeblich null");
+        }
+
+        return donation;
     }
 
     @Override
-    public void transferDonations() {
-        
+    public void transferDonations() {        
         TypedQuery<Donation> query =
                 entityManager.createNamedQuery(Donation.findByStatus, Donation.class);
         query.setParameter("status", Status.IN_PROCESS);

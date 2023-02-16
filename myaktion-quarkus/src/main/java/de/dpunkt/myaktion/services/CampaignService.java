@@ -5,6 +5,8 @@ import de.dpunkt.myaktion.model.Organizer;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 public interface CampaignService {
     List<Campaign> getAllCampaigns();
 
@@ -20,5 +22,6 @@ public interface CampaignService {
 
     void persistCampaign(Campaign c);
 
+    @Transactional
     Campaign findCampaign(Long id);
 }

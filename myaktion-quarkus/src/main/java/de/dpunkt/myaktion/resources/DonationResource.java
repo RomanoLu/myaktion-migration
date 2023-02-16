@@ -1,8 +1,6 @@
 package de.dpunkt.myaktion.resources;
 
-import de.dpunkt.myaktion.model.Account;
 import de.dpunkt.myaktion.model.Donation;
-import de.dpunkt.myaktion.model.Donation.Status;
 import de.dpunkt.myaktion.services.DonationService;
 import de.dpunkt.myaktion.services.exceptions.ObjectNotFoundException;
 
@@ -31,8 +29,7 @@ public class DonationResource {
     @Path("/donation/{campaignId}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void addDonation(Donation donation) {  
-              
-        donationService.addDonation(donation.getCampaign().getId(), donation);
+        donationService.addDonation(donation.getCampaign().getId(), donation); 
     }
 
     @GET

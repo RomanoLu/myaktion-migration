@@ -2,10 +2,6 @@ package de.dpunkt.myaktion.services;
 
 import de.dpunkt.myaktion.model.Campaign;
 import de.dpunkt.myaktion.model.Organizer;
-
-import io.quarkus.security.identity.SecurityIdentity;
-
-import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -35,6 +31,7 @@ public class CampaignServiceBean implements CampaignService {
     public void persistCampaign(Campaign c){
         this.entityManager.persist(c);
     }
+    
     @Override
     @Transactional
     public Campaign findCampaign(Long id){       
@@ -43,7 +40,6 @@ public class CampaignServiceBean implements CampaignService {
 
     @Override
     public Campaign addCampaign(Campaign campaign, Organizer organizer) {
-        //Organizer organizer = getLoggedinOrganizer();
         campaign.setOrganizer(organizer);
         entityManager.persist(campaign);
         return campaign;
@@ -80,10 +76,5 @@ public class CampaignServiceBean implements CampaignService {
             result = 0d;
         return result;
     }
-
-    private Organizer getLoggedinOrganizer() {
-        return null;
-    }
-
 
 }

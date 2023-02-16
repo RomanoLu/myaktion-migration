@@ -8,7 +8,7 @@ import java.util.List;
 public interface DonationService {
     List<Donation> getDonationList(Long campaignId);
 
-    void addDonation(Long campaignId, Donation donation);
+    Donation addDonation(Long campaignId, Donation donation);
 
     void transferDonations();
 
