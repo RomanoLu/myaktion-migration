@@ -1,7 +1,6 @@
 package de.dpunkt.myaktion.data;
 
 import de.dpunkt.myaktion.model.Campaign;
-import de.dpunkt.myaktion.model.Organizer;
 import de.dpunkt.myaktion.services.CampaignService;
 import de.dpunkt.myaktion.util.Events.Added;
 import de.dpunkt.myaktion.util.Events.Deleted;

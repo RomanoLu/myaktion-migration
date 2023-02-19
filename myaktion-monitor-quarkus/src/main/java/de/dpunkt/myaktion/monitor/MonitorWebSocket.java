@@ -2,7 +2,7 @@ package de.dpunkt.myaktion.monitor;
 
 import de.dpunkt.myaktion.model.Donation;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Dependent
+@ApplicationScoped
 @ServerEndpoint(value = "/donation", encoders = {DonationEncoder.class})
 public class MonitorWebSocket {
     public static final String CAMPAIGN_ID = "CampaignId";
@@ -25,12 +25,14 @@ public class MonitorWebSocket {
 
     private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
 
+    
     public static Set<Session> getSessions() {
         return sessions;
     }
 
     @OnOpen
     public void onOpen(Session session) {
+        System.out.println("mit Client verbunden");
         logger.info("Client hat sich verbunden: " + session);
         sessions.add(session);
     }
@@ -43,6 +45,7 @@ public class MonitorWebSocket {
 
     @OnMessage
     public void setCampaignId(Long campaignId, Session session) {
+        
         logger.info("Client " + session.getId() + " hat Aktion " + campaignId
                 + " ausgewählt.");
         try {
@@ -70,6 +73,18 @@ public class MonitorWebSocket {
         } catch (IOException | EncodeException e) {
             logger.log(Level.INFO, "Keine Verbindung zu Client: " + session, e);
         }
+         /*
+        Donation d = new Donation();
+        d.setDonorName("luca");
+        d.setAmount(10.0);
+         try {
+            session.getBasicRemote().sendObject(d);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } catch (EncodeException e) {
+            System.out.println(e.getMessage());
+        }
+        */
     }
 
 }

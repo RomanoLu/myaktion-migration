@@ -3,6 +3,7 @@ package de.dpunkt.myaktion.services;
 import de.dpunkt.myaktion.model.Campaign;
 import de.dpunkt.myaktion.model.Donation;
 import de.dpunkt.myaktion.model.Donation.Status;
+import de.dpunkt.myaktion.monitor.DonationDelegator;
 import de.dpunkt.myaktion.services.exceptions.ObjectNotFoundException;
 
 import javax.enterprise.context.RequestScoped;
@@ -31,11 +32,19 @@ public class DonationServiceBean implements DonationService {
 
     @Override
     public Donation addDonation(Long campaignId, Donation donation) {
+        try {
+            DonationDelegator donationDelegator = new DonationDelegator();
+            donationDelegator.sendDonation(campaignId, de.dpunkt.myaktion.Myaktionmonitor.Donation.newBuilder()
+                    .setAmount(donation.getAmount()).setDonorName(donation.getDonorName()).build());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         Campaign managedCampaign = entityManager.find(Campaign.class, campaignId);
         donation.setCampaign(managedCampaign);
-        if (donation.getCampaign()!= null){
+        if (donation.getCampaign() != null) {
             entityManager.persist(donation);
-        }else{
+        } else {
             System.out.println("Campaign ist angeblich null");
         }
 
@@ -43,24 +52,24 @@ public class DonationServiceBean implements DonationService {
     }
 
     @Override
-    public void transferDonations() {        
-        TypedQuery<Donation> query =
-                entityManager.createNamedQuery(Donation.findByStatus, Donation.class);
+    public void transferDonations() {
+        TypedQuery<Donation> query = entityManager.createNamedQuery(Donation.findByStatus, Donation.class);
         query.setParameter("status", Status.IN_PROCESS);
         List<Donation> donations = query.getResultList();
         donations.forEach(donation -> donation.setStatus(Status.TRANSFERRED));
-        
+
     }
 
     @Override
-    public void persistDonation(Donation d){
+    public void persistDonation(Donation d) {
         this.entityManager.persist(d);
     }
 
     @Override
     public List<Donation> getDonationListPublic(Long campaignId) throws ObjectNotFoundException {
         Campaign managedCampaign = entityManager.find(Campaign.class, campaignId);
-        if (managedCampaign == null) throw new ObjectNotFoundException();
+        if (managedCampaign == null)
+            throw new ObjectNotFoundException();
         List<Donation> donations = managedCampaign.getDonations();
         final Function<Donation, Donation> donationFilter = donation -> {
             Donation filtered = new Donation();
