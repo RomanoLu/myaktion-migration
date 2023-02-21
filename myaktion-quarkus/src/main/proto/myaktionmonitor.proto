@@ -1,6 +1,9 @@
 syntax = "proto3";
 
-package de.dpunkt.myaktion;
+option java_multiple_files = true;
+option java_package = "de.dpunkt.myaktion";
+option java_outer_classname = "MyAktionProto";
+
 
 message Donation {
     double amount = 1;

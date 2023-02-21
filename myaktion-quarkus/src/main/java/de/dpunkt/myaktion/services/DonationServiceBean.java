@@ -34,7 +34,7 @@ public class DonationServiceBean implements DonationService {
     public Donation addDonation(Long campaignId, Donation donation) {
         try {
             DonationDelegator donationDelegator = new DonationDelegator();
-            donationDelegator.sendDonation(campaignId, de.dpunkt.myaktion.Myaktionmonitor.Donation.newBuilder()
+            donationDelegator.sendDonation(campaignId, de.dpunkt.myaktion.Donation.newBuilder()
                     .setAmount(donation.getAmount()).setDonorName(donation.getDonorName()).build());
         } catch (Exception e) {
             System.out.println(e.getMessage());
