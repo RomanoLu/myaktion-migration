@@ -1,11 +1,9 @@
-package de.dpunkt.myaktion.monitor.ws;
+package de.dpunkt.myaktion.monitor.grpc;
 
 import de.dpunkt.myaktion.monitor.MonitorWebSocket;
 import io.quarkus.grpc.GrpcService;
 import io.smallrye.mutiny.Uni;
 import de.dpunkt.myaktion.MyaktionMonitorService;
-import de.dpunkt.myaktion.Myaktionmonitor.DonationRequest;
-import de.dpunkt.myaktion.Myaktionmonitor.DonationResponse;
 import de.dpunkt.myaktion.model.Donation;
 
 import javax.websocket.EncodeException;
@@ -18,16 +16,17 @@ import java.util.logging.Logger;
 @GrpcService
 public class DonationDelegator implements MyaktionMonitorService{
 
-    private Logger logger = Logger.getLogger(DonationDelegator.class.getName());
+    private Logger logger = Logger.getLogger(DonationDelegator.class.getName());   
 
     @Override
-    public Uni<DonationResponse> sendDonation(DonationRequest request) {
+    public Uni<de.dpunkt.myaktion.DonationResponse> sendDonation(de.dpunkt.myaktion.DonationRequest request) {
         Long campaignId = request.getCampaignId();
-        de.dpunkt.myaktion.Myaktionmonitor.Donation gRPCdonation = request.getDonation();
         Donation donation = new Donation();
-        donation.setAmount(gRPCdonation.getAmount());
-        donation.setDonorName(gRPCdonation.getDonorName());
-        
+        donation.setAmount(request.getDonation().getAmount());
+        donation.setDonorName(request.getDonation().getDonorName());
+
+        System.out.println("DonorName: " + donation.getDonorName());
+   
         for (Session session : MonitorWebSocket.getSessions()) {
             Long clientCampaignId = (Long) session.getUserProperties().get(
                     MonitorWebSocket.CAMPAIGN_ID);
@@ -41,7 +40,8 @@ public class DonationDelegator implements MyaktionMonitorService{
                 }
             }
         }
-        return Uni.createFrom().item("Alles gut").map(msg -> DonationResponse.newBuilder().setMessage(msg).build());
+       
+        return Uni.createFrom().item("Alles gut").map(msg -> de.dpunkt.myaktion.DonationResponse.newBuilder().setMessage(msg).build());
         
     }
 
