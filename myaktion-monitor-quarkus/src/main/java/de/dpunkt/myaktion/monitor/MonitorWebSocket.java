@@ -3,7 +3,7 @@ package de.dpunkt.myaktion.monitor;
 import de.dpunkt.myaktion.model.Donation;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+//import javax.inject.Inject;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import javax.ws.rs.NotFoundException;
@@ -19,10 +19,10 @@ public class MonitorWebSocket {
     public static final String CAMPAIGN_ID = "CampaignId";
 
     private Logger logger = Logger.getLogger(MonitorWebSocket.class.getName());
-
+/*
     @Inject
     private DonationListProvider donationListProvider;
-
+ */
     private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
 
     
@@ -51,7 +51,10 @@ public class MonitorWebSocket {
         try {
             List<Donation> donations = new LinkedList<>();
             try {
-                donations = donationListProvider.getDonationList(campaignId);
+                Donation d = new Donation();
+                d.setDonorName("luca");
+                d.setAmount(10.0);
+                donations.add(d);
             } catch (NotFoundException e) {
                 session.getBasicRemote().sendText(
                         "Die Aktion mit der ID: " + campaignId
@@ -73,18 +76,7 @@ public class MonitorWebSocket {
         } catch (IOException | EncodeException e) {
             logger.log(Level.INFO, "Keine Verbindung zu Client: " + session, e);
         }
-         /*
-        Donation d = new Donation();
-        d.setDonorName("luca");
-        d.setAmount(10.0);
-         try {
-            session.getBasicRemote().sendObject(d);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } catch (EncodeException e) {
-            System.out.println(e.getMessage());
-        }
-        */
+                 
     }
 
 }

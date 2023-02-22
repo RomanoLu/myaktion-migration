@@ -3,7 +3,6 @@ package de.dpunkt.myaktion.services;
 import de.dpunkt.myaktion.model.Campaign;
 import de.dpunkt.myaktion.model.Donation;
 import de.dpunkt.myaktion.model.Donation.Status;
-import de.dpunkt.myaktion.monitor.DonationDelegator;
 import de.dpunkt.myaktion.services.exceptions.ObjectNotFoundException;
 
 import javax.enterprise.context.RequestScoped;
@@ -32,14 +31,6 @@ public class DonationServiceBean implements DonationService {
 
     @Override
     public Donation addDonation(Long campaignId, Donation donation) {
-        try {
-            DonationDelegator donationDelegator = new DonationDelegator();
-            donationDelegator.sendDonation(campaignId, de.dpunkt.myaktion.Donation.newBuilder()
-                    .setAmount(donation.getAmount()).setDonorName(donation.getDonorName()).build());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
         Campaign managedCampaign = entityManager.find(Campaign.class, campaignId);
         donation.setCampaign(managedCampaign);
         if (donation.getCampaign() != null) {
