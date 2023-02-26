@@ -18,7 +18,6 @@ public class CampaignServiceBean implements CampaignService {
     @Inject
     EntityManager entityManager;
 
-   
     @Override
     public List<Campaign> getAllCampaigns() {
         TypedQuery<Campaign> query = entityManager.createNamedQuery(Campaign.findAll, Campaign.class);
@@ -28,14 +27,14 @@ public class CampaignServiceBean implements CampaignService {
     }
 
     @Override
-    public void persistCampaign(Campaign c){
+    public void persistCampaign(Campaign c) {
         this.entityManager.persist(c);
     }
-    
+
     @Override
     @Transactional
-    public Campaign findCampaign(Long id){       
-        return entityManager.find(Campaign.class, id);
+    public Campaign findCampaign(Long id) {
+     return entityManager.find(Campaign.class, id);
     }
 
     @Override

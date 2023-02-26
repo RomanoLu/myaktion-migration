@@ -26,6 +26,15 @@ public class CampaignResource {
         return allCampaigns;
     }
 
+    @GET
+    @Path("/{campaignId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Campaign getCampaignbyID(@PathParam(value = "campaignId") Long campaignId){
+        Campaign requestedCampaign = campaignService.findCampaign(campaignId);
+        requestedCampaign.setDonations(null);
+        return requestedCampaign;
+    }
+
     @DELETE
     @Path("/{campaignId}")
     public void deleteCampaign(@PathParam(value = "campaignId") Long campaignId) {

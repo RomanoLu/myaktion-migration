@@ -3,7 +3,7 @@ package de.dpunkt.myaktion.monitor;
 import de.dpunkt.myaktion.model.Donation;
 
 import javax.enterprise.context.ApplicationScoped;
-//import javax.inject.Inject;
+import javax.inject.Inject;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import javax.ws.rs.NotFoundException;
@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+
 
 @ApplicationScoped
 @ServerEndpoint(value = "/donation", encoders = {DonationEncoder.class})
@@ -19,10 +21,12 @@ public class MonitorWebSocket {
     public static final String CAMPAIGN_ID = "CampaignId";
 
     private Logger logger = Logger.getLogger(MonitorWebSocket.class.getName());
-/*
+
+   
     @Inject
-    private DonationListProvider donationListProvider;
- */
+    @RestClient
+    DonationListProvider client;
+
     private static Set<Session> sessions = Collections.synchronizedSet(new HashSet<Session>());
 
     
@@ -51,10 +55,7 @@ public class MonitorWebSocket {
         try {
             List<Donation> donations = new LinkedList<>();
             try {
-                Donation d = new Donation();
-                d.setDonorName("luca");
-                d.setAmount(10.0);
-                donations.add(d);
+                donations = client.getDonations(campaignId);
             } catch (NotFoundException e) {
                 session.getBasicRemote().sendText(
                         "Die Aktion mit der ID: " + campaignId

@@ -1,41 +1,22 @@
 package de.dpunkt.myaktion.monitor;
 
-import de.dpunkt.myaktion.model.Donation;
-import de.dpunkt.myaktion.model.DonationListMBR;
-import de.dpunkt.myaktion.monitor.util.DisableHostnameVerifier;
-
-import javax.enterprise.context.Dependent;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Dependent
-public class DonationListProvider {
-    private static final String REST_HOST = "localhost";
-    private static final int REST_PORT = 8443;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-    private static final String REST_DONATION_LIST = "https://" + REST_HOST + ":"
-            + REST_PORT + "/my-aktion/rest/donation/list/";
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-    private Client restClient;
+import de.dpunkt.myaktion.model.Donation;
 
-    public DonationListProvider() {
-        ClientBuilder builder = ClientBuilder.newBuilder();
-        builder.register(DonationListMBR.class);
-        builder.hostnameVerifier(new DisableHostnameVerifier());
-        restClient = builder.build();
-    }
+@RegisterRestClient(baseUri = "http://localhost:8443/donation/organizer/donation/list")
+public interface DonationListProvider {
 
-    public List<Donation> getDonationList(long campaignId) throws WebApplicationException {
-        WebTarget target = restClient.target(REST_DONATION_LIST + campaignId);
-        GenericType<List<Donation>> list = new GenericType<List<Donation>>() {
-        };
-        List<Donation> donations = target.request(MediaType.APPLICATION_JSON).get(list);
-        return donations;
-    }
-
+    @GET
+    @Path("/{campaignId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    List<Donation> getDonations(@PathParam("campaignId") Long campaignId);
 }

@@ -34,11 +34,14 @@ public class DonationResource {
     @POST
     @Path("/donation/{campaignId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addDonation(Donation donation) {  
-        monitorServiceStub.sendDonation( buildRequest(donation.getCampaign().getId(),de.dpunkt.myaktion.Donation.newBuilder()
-        .setAmount(donation.getAmount()).setDonorName(donation.getDonorName()).build() ));       
-        
-        donationService.addDonation(donation.getCampaign().getId(), donation); 
+    public Response addDonation(@PathParam("campaignId")Long campaignId, Donation donation) { 
+        try{
+            monitorServiceStub.sendDonation( buildRequest(campaignId, de.dpunkt.myaktion.Donation.newBuilder()
+            .setAmount(donation.getAmount()).setDonorName(donation.getDonorName()).build() ));       
+        }catch(Exception e){
+            System.out.println("gRPC Probleme");
+        } 
+        donationService.addDonation(campaignId, donation); 
         return Response.ok().build();
     }
 
