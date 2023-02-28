@@ -21,9 +21,10 @@ public class OrganizerServiceBean implements OrganizerService {
     }
 
     @Override
-    public void loginOrganizer(Organizer organizer) {
-        
+    public boolean isValidUser(String email, String passwort) {
+        return true;
         
     }
+
     
 }

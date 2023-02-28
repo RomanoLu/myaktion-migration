@@ -1,16 +1,15 @@
 package de.dpunkt.myaktion.services;
 
 import de.dpunkt.myaktion.model.Campaign;
-import de.dpunkt.myaktion.model.Organizer;
 
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 public interface CampaignService {
-    List<Campaign> getAllCampaigns();
+    List<Campaign> getAllCampaigns(String  email);
 
-    Campaign addCampaign(Campaign campaign, Organizer organizer);
+    Campaign addCampaign(Campaign campaign, String email);
 
     void deleteCampaign(Campaign campaign);
 

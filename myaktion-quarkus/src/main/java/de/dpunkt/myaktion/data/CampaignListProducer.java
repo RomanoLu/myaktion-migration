@@ -16,7 +16,7 @@ import java.util.List;
 
 @RequestScoped
 public class CampaignListProducer {
-
+/*
     private List<Campaign> campaigns;
 
     @Inject
@@ -24,7 +24,7 @@ public class CampaignListProducer {
 
     @PostConstruct
     public void init() {
-        campaigns = campaignService.getAllCampaigns();
+       // campaigns = campaignService.getAllCampaigns();
     }
 
     @Produces
@@ -47,5 +47,5 @@ public class CampaignListProducer {
         campaignService.updateCampaign(campaign);
         init();
     }
-
+ */
 }

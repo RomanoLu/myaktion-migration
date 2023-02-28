@@ -2,7 +2,7 @@ package de.dpunkt.myaktion.services;
 
 import de.dpunkt.myaktion.model.Campaign;
 import de.dpunkt.myaktion.model.Organizer;
-import javax.annotation.security.RolesAllowed;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 
 import java.util.List;
 
-@RolesAllowed("Organizer")
 @Transactional
 @RequestScoped
 public class CampaignServiceBean implements CampaignService {
@@ -19,8 +18,9 @@ public class CampaignServiceBean implements CampaignService {
     EntityManager entityManager;
 
     @Override
-    public List<Campaign> getAllCampaigns() {
+    public List<Campaign> getAllCampaigns(String email) {
         TypedQuery<Campaign> query = entityManager.createNamedQuery(Campaign.findAll, Campaign.class);
+        query.setParameter("organizer", getLoggedinOrganizer(email));
         List<Campaign> campaigns = query.getResultList();
         campaigns.forEach(campaign -> campaign.setAmountDonatedSoFar(getAmountDonatedSoFar(campaign)));
         return campaigns;
@@ -38,8 +38,8 @@ public class CampaignServiceBean implements CampaignService {
     }
 
     @Override
-    public Campaign addCampaign(Campaign campaign, Organizer organizer) {
-        campaign.setOrganizer(organizer);
+    public Campaign addCampaign(Campaign campaign, String email) {
+        campaign.setOrganizer(getLoggedinOrganizer(email));
         entityManager.persist(campaign);
         return campaign;
     }
@@ -74,6 +74,13 @@ public class CampaignServiceBean implements CampaignService {
         if (result == null)
             result = 0d;
         return result;
+    }
+
+    private Organizer getLoggedinOrganizer(String email) {
+        String organizerEmail = email;
+        Organizer organizer = entityManager.createNamedQuery(Organizer.findByEmail, Organizer.class)
+                .setParameter("email", organizerEmail).getSingleResult();
+        return organizer;
     }
 
 }

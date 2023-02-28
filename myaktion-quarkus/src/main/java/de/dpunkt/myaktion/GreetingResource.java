@@ -84,10 +84,10 @@ public class GreetingResource {
     @POST
     public Response addOrganizer(){
         Organizer organizer = new Organizer();
-        organizer.setEmail("l.romano@gmx.de");
-        organizer.setFirstName("Luca");
-        organizer.setLastName("Romano");
-        organizer.setPassword("PasswortVonLuca");
+        organizer.setEmail("max@mustermann.de");
+        organizer.setFirstName("Max");
+        organizer.setLastName("Mustermann");
+        organizer.setPassword("secret");
         organizerService.addOrganizer(organizer);
         return Response.ok(organizer).build();
     }

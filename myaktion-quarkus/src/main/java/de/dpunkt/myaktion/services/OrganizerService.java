@@ -8,7 +8,7 @@ public interface OrganizerService {
 
     void addOrganizer(Organizer organizer);
 
-    void loginOrganizer(Organizer organizer);
+    boolean isValidUser(String email, String passwort);
 
     
 }
