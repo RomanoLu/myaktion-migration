@@ -1,5 +1,5 @@
 package de.dpunkt.myaktion.data;
-
+/*
 import de.dpunkt.myaktion.model.Campaign;
 import de.dpunkt.myaktion.services.CampaignService;
 import de.dpunkt.myaktion.util.Events.Added;
@@ -7,13 +7,13 @@ import de.dpunkt.myaktion.util.Events.Deleted;
 import de.dpunkt.myaktion.util.Events.Updated;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
+
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
-
+import java.util.List;*/
+import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class CampaignListProducer {
 /*

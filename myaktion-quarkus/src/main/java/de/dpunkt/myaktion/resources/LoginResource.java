@@ -8,11 +8,12 @@ import org.eclipse.microprofile.jwt.Claims;
 import io.smallrye.jwt.build.Jwt;
 
 import javax.inject.Inject;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import de.dpunkt.myaktion.Auth.LoginRequest;
 import de.dpunkt.myaktion.services.OrganizerServiceBean;
 
 
@@ -23,11 +24,11 @@ public class LoginResource {
     OrganizerServiceBean organizerServiceBean;
 
     @POST
-    public Response login(@FormParam("email") String email, 
-                          @FormParam("password") String password) {
+    public Response login(LoginRequest loginRequest) {
         
-        if (organizerServiceBean.isValidUser(email, password)) {
-            String token = generateToken(email);
+        if (organizerServiceBean.isValidUser(loginRequest.getEmail(), loginRequest.getPassword())) {
+            System.out.println(loginRequest.getEmail()+ " hat sich angemeldet");
+            String token = generateToken(loginRequest.getEmail());
             return Response.ok(token).build();
         } else {
             return Response.status(Status.UNAUTHORIZED).build();

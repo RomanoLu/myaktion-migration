@@ -22,8 +22,14 @@ public class OrganizerServiceBean implements OrganizerService {
 
     @Override
     public boolean isValidUser(String email, String passwort) {
-        return true;
-        
+        Organizer organizer = entityManager.createNamedQuery(Organizer.findByEmail, Organizer.class)
+        .setParameter("email", email).getSingleResult();
+                
+        if(organizer.getPassword().equals(passwort)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     
