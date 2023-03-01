@@ -19,7 +19,7 @@ public class CampaignServiceBean implements CampaignService {
 
     @Override
     public List<Campaign> getAllCampaigns(String email) {
-        TypedQuery<Campaign> query = entityManager.createNamedQuery(Campaign.findAll, Campaign.class);
+        TypedQuery<Campaign> query = entityManager.createNamedQuery(Campaign.findByOrganizer, Campaign.class);
         query.setParameter("organizer", getLoggedinOrganizer(email));
         List<Campaign> campaigns = query.getResultList();
         campaigns.forEach(campaign -> campaign.setAmountDonatedSoFar(getAmountDonatedSoFar(campaign)));
