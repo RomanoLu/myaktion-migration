@@ -72,6 +72,7 @@ public class CampaignResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Campaign updateCampaign(@PathParam(value = "campaignId") Long campaignId,
                                    Campaign newCampaign, @Context SecurityContext sec) {
+                                    
         Campaign campaign = campaignService.getCampaign(campaignId);
         campaign.setName(newCampaign.getName());
         campaign.setDonationMinimum(newCampaign.getDonationMinimum());
